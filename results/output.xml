@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.1 (Python 3.13.1 on win32)" generated="2025-06-24T22:41:09.251218" rpa="false" schemaversion="5">
+<suite id="s1" name="Login" source="C:\Users\Taha\RobotFrameworkE2ETests.OTAI\otaiE2ETest\tests\login.robot">
+<test id="s1-t1" name="Test++: Valid login" line="8">
+<kw name="Given I Open the Lightence App" owner="navigationStepDefinitions">
+<kw name="Given I Open The App" owner="navigationPage">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-06-24T22:41:09.634004" level="INFO">Opening browser 'chrome' to base url 'https://lightence-ant-design-react-template.pages.dev/'.</msg>
+<arg>${LOGIN_URL}</arg>
+<arg>${browser}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-06-24T22:41:09.633742" elapsed="5.509331"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-06-24T22:41:15.143566" elapsed="0.392667"/>
+</kw>
+<status status="PASS" start="2025-06-24T22:41:09.633109" elapsed="5.903459"/>
+</kw>
+<status status="PASS" start="2025-06-24T22:41:09.632706" elapsed="5.903990"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-06-24T22:41:25.539702" level="INFO">Slept 10 seconds.</msg>
+<arg>10s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-06-24T22:41:15.539054" elapsed="10.000794"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>URL: ${LOGIN_URL}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-06-24T22:41:25.540324" elapsed="0.000499"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>EMAIL: ${USEREMAIL}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-06-24T22:41:25.541053" elapsed="0.000409"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>PASS: ${USERPASSWORD}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-06-24T22:41:25.541783" elapsed="0.000384"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-06-24T22:41:25.542587" elapsed="2.996965"/>
+</kw>
+<tag>LotfiOTAI</tag>
+<tag>OTAI</tag>
+<tag>Test++</tag>
+<status status="PASS" start="2025-06-24T22:41:09.631819" elapsed="18.908528"/>
+</test>
+<status status="PASS" start="2025-06-24T22:41:09.253108" elapsed="19.288593"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">LotfiOTAI</stat>
+<stat pass="1" fail="0" skip="0">OTAI</stat>
+<stat pass="1" fail="0" skip="0">Test++</stat>
+</tag>
+<suite>
+<stat name="Login" id="s1" pass="1" fail="0" skip="0">Login</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
