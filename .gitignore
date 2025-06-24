@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+.env.*
+*.log
+
+# Robot Framework outputs
+output.xml
+report.html
+log.html
+results/
