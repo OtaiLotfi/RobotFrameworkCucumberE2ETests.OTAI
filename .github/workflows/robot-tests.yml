@@ -20,21 +20,26 @@ on:
         required: false
         default: ''
       env:
-        description: 'Environment to run tests in (dev, test, prod)'
+        description: 'Environment to run tests in (dev, test, staging)'
         required: false
         default: 'test'
 
 jobs:
-  test:
+  setup-env:
     runs-on: ubuntu-latest
+    outputs:
+      RF_ENV: ${{ steps.set-env.outputs.RF_ENV }}
+    steps:
+      - name: Set selected environment
+        id: set-env
+        run: echo "RF_ENV=${{ github.event.inputs.env }}" >> $GITHUB_OUTPUT
 
+  run-tests:
+    needs: setup-env
+    runs-on: ubuntu-latest
     env:
-      LOGIN_URL: ${{ secrets.LOGIN_URL }}
-      USEREMAIL: ${{ secrets.USEREMAIL }}
-      USERPASSWORD: ${{ secrets.USERPASSWORD }}
-      RF_ENV: ${{ github.event.inputs.env }}
+      RF_ENV: ${{ needs.setup-env.outputs.RF_ENV }}
       HEADLESS: "true"
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -58,7 +63,6 @@ jobs:
           EXCLUDE_TAGS="${{ github.event.inputs.exclude_tags }}"
 
           CMD="robot --outputdir results"
-
           if [ ! -z "$INCLUDE_TAGS" ]; then
             CMD="$CMD --include \"$INCLUDE_TAGS\""
           fi
@@ -69,6 +73,13 @@ jobs:
 
           echo "Running command: $CMD"
           eval $CMD
+
+  generate-report:
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Upload Robot Framework reports
         uses: actions/upload-artifact@v4
