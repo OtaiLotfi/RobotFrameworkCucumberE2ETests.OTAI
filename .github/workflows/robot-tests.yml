@@ -15,6 +15,7 @@ jobs:
       USEREMAIL: ${{ secrets.USEREMAIL }}
       USERPASSWORD: ${{ secrets.USERPASSWORD }}
       RF_ENV: ${{ secrets.RF_ENV }}
+      HEADLESS: "true"       
 
     steps:
       - name: Checkout code
