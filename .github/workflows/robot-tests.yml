@@ -58,19 +58,25 @@ jobs:
       - name: Run Robot Framework tests
         run: |
           source venv/bin/activate
+
           TEST_PATH="${{ github.event.inputs.test_path }}"
           INCLUDE_TAGS="${{ github.event.inputs.test_tags }}"
           EXCLUDE_TAGS="${{ github.event.inputs.exclude_tags }}"
 
+          if [ -z "$TEST_PATH" ]; then
+            TEST_PATH="otaiE2ETest/tests/"
+          fi
+
           CMD="robot --outputdir results"
+
           if [ ! -z "$INCLUDE_TAGS" ]; then
             CMD="$CMD --include \"$INCLUDE_TAGS\""
           fi
           if [ ! -z "$EXCLUDE_TAGS" ]; then
             CMD="$CMD --exclude \"$EXCLUDE_TAGS\""
           fi
-          CMD="$CMD \"$TEST_PATH\""
 
+          CMD="$CMD \"$TEST_PATH\""
           echo "Running command: $CMD"
           eval $CMD
 
