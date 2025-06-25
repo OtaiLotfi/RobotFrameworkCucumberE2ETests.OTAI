@@ -8,17 +8,21 @@ on:
   workflow_dispatch:
     inputs:
       test_path:
-        description: 'Path to tests (folder or .robot file)'
+        description: 'Path to tests'
         required: false
         default: 'otaiE2ETest/tests/'
       test_tags:
-        description: 'Tags to include (optional, e.g., OTAI or OTAIANDTest++)'
+        description: 'Tags to include (optional)'
         required: false
         default: ''
       exclude_tags:
-        description: 'Tags to exclude (optional, e.g., WIP or Slow)'
+        description: 'Tags to exclude (optional)'
         required: false
         default: ''
+      env:
+        description: 'Environment to run tests in (dev, test, prod)'
+        required: false
+        default: 'test'
 
 jobs:
   test:
@@ -28,7 +32,7 @@ jobs:
       LOGIN_URL: ${{ secrets.LOGIN_URL }}
       USEREMAIL: ${{ secrets.USEREMAIL }}
       USERPASSWORD: ${{ secrets.USERPASSWORD }}
-      RF_ENV: ${{ secrets.RF_ENV }}
+      RF_ENV: ${{ github.event.inputs.env }}
       HEADLESS: "true"
 
     steps:
