@@ -29,9 +29,6 @@ jobs:
   setup-env:
     runs-on: ubuntu-latest
     outputs:
-      LOGIN_URL: ${{ secrets.LOGIN_URL }}
-      USEREMAIL: ${{ secrets.USEREMAIL }}
-      USERPASSWORD: ${{ secrets.USERPASSWORD }}
       RF_ENV: ${{ steps.setenv.outputs.RF_ENV }}
     steps:
       - name: Setup environment
@@ -47,9 +44,6 @@ jobs:
     needs: setup-env
     runs-on: ubuntu-latest
     env:
-      LOGIN_URL: ${{ needs.setup-env.outputs.LOGIN_URL }}
-      USEREMAIL: ${{ needs.setup-env.outputs.USEREMAIL }}
-      USERPASSWORD: ${{ needs.setup-env.outputs.USERPASSWORD }}
       RF_ENV: ${{ needs.setup-env.outputs.RF_ENV }}
       HEADLESS: "true"
     steps:
@@ -70,6 +64,10 @@ jobs:
       - name: Run Robot Framework tests
         run: |
           source venv/bin/activate
+          set -a
+          source otaiE2ETest/env_files/${{ env.RF_ENV }}.env
+          set +a
+
           TEST_PATH="${{ github.event.inputs.test_path }}"
           INCLUDE_TAGS="${{ github.event.inputs.test_tags }}"
           EXCLUDE_TAGS="${{ github.event.inputs.exclude_tags }}"
@@ -101,10 +99,9 @@ jobs:
           path: results/
 
       - name: Generate Report
-        run: |
-          echo "Reports downloaded to ./results folder"
+        run: echo "Reports downloaded to ./results folder"
 
-      - name: Upload Robot Framework reports
+      - name: Upload Final Robot Framework reports
         uses: actions/upload-artifact@v4
         with:
           name: robot-final-results
