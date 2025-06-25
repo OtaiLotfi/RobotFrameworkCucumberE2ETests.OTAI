@@ -15,7 +15,7 @@ jobs:
       USEREMAIL: ${{ secrets.USEREMAIL }}
       USERPASSWORD: ${{ secrets.USERPASSWORD }}
       RF_ENV: ${{ secrets.RF_ENV }}
-      HEADLESS: "true"       
+      HEADLESS: "true"
 
     steps:
       - name: Checkout code
@@ -36,3 +36,9 @@ jobs:
         run: |
           source venv/bin/activate
           robot --outputdir results otaiE2ETest/tests/
+
+      - name: Upload Robot Framework reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: robot-results
+          path: results/
