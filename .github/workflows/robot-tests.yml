@@ -5,6 +5,20 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  workflow_dispatch:
+    inputs:
+      test_path:
+        description: 'Path to tests (folder or .robot file)'
+        required: false
+        default: 'otaiE2ETest/tests/'
+      test_tags:
+        description: 'Tags to include (optional, e.g., OTAI or OTAIANDTest++)'
+        required: false
+        default: ''
+      exclude_tags:
+        description: 'Tags to exclude (optional, e.g., WIP or Slow)'
+        required: false
+        default: ''
 
 jobs:
   test:
@@ -35,7 +49,22 @@ jobs:
       - name: Run Robot Framework tests
         run: |
           source venv/bin/activate
-          robot --outputdir results otaiE2ETest/tests/
+          TEST_PATH="${{ github.event.inputs.test_path }}"
+          INCLUDE_TAGS="${{ github.event.inputs.test_tags }}"
+          EXCLUDE_TAGS="${{ github.event.inputs.exclude_tags }}"
+
+          CMD="robot --outputdir results"
+
+          if [ ! -z "$INCLUDE_TAGS" ]; then
+            CMD="$CMD --include \"$INCLUDE_TAGS\""
+          fi
+          if [ ! -z "$EXCLUDE_TAGS" ]; then
+            CMD="$CMD --exclude \"$EXCLUDE_TAGS\""
+          fi
+          CMD="$CMD \"$TEST_PATH\""
+
+          echo "Running command: $CMD"
+          eval $CMD
 
       - name: Upload Robot Framework reports
         uses: actions/upload-artifact@v4
