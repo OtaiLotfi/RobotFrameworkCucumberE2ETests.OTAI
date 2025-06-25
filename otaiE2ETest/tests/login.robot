@@ -6,5 +6,4 @@ Test Tags       Test++   LotfiOTAI
 *** Test Cases ***
 Test++: Valid login
     [Tags]    OTAI   
-    Given I Open the Lightence App
-
+    Given I Open The Application
