@@ -14,7 +14,7 @@ on:
       test_tags:
         description: 'Tags to include (optional)'
         required: false
-        default: ''
+        default: 'LotfiOTAI AND Test++'
       exclude_tags:
         description: 'Tags to exclude (optional)'
         required: false
