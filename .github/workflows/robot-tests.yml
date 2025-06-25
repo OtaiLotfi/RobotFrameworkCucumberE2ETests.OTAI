@@ -25,13 +25,13 @@ on:
         default: 'test'
 
 jobs:
-  run-e2e-tests:
-    name: Run RobotFramework E2E Tests
+  test:
     runs-on: ubuntu-latest
-    outputs:
-      test_output: ${{ steps.set-output.outputs.test_output }}
 
     env:
+      LOGIN_URL: ${{ secrets.LOGIN_URL }}
+      USEREMAIL: ${{ secrets.USEREMAIL }}
+      USERPASSWORD: ${{ secrets.USERPASSWORD }}
       RF_ENV: ${{ github.event.inputs.env }}
       HEADLESS: "true"
 
@@ -49,15 +49,12 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
-
       - name: Run Robot Framework tests
-        id: set-output
         run: |
           source venv/bin/activate
           TEST_PATH="${{ github.event.inputs.test_path }}"
           INCLUDE_TAGS="${{ github.event.inputs.test_tags }}"
           EXCLUDE_TAGS="${{ github.event.inputs.exclude_tags }}"
-
           CMD="robot --outputdir results"
           if [ ! -z "$INCLUDE_TAGS" ]; then
             CMD="$CMD --include \"$INCLUDE_TAGS\""
@@ -66,29 +63,8 @@ jobs:
             CMD="$CMD --exclude \"$EXCLUDE_TAGS\""
           fi
           CMD="$CMD \"$TEST_PATH\""
-
           echo "Running command: $CMD"
           eval $CMD
-
-  generate-report:
-    name: Generate E2E Report
-    runs-on: ubuntu-latest
-    needs: run-e2e-tests
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download Robot Framework results
-        uses: actions/download-artifact@v4
-        with:
-          name: robot-results
-          path: results/
-
-      - name: Display log.html as summary (optional)
-        run: |
-          echo "Tests completed. You can find detailed logs in results/log.html"
-
       - name: Upload Robot Framework reports
         uses: actions/upload-artifact@v4
         with:
