@@ -13,7 +13,6 @@ I Open The App
 
 I Login In The App
     [Arguments]      ${email}               ${password}
-    Sleep   5s
     Clear Field Character By Character      ${email_locator}
     Input Text       ${email_locator}       ${email}
     Clear Field Character By Character      ${password_locator} 
