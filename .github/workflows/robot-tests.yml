@@ -28,19 +28,20 @@ jobs:
 
   setup-env:
     runs-on: ubuntu-latest
-    env:
-      LOGIN_URL: ${{ secrets.LOGIN_URL }}
-      USEREMAIL: ${{ secrets.USEREMAIL }}
-      USERPASSWORD: ${{ secrets.USERPASSWORD }}
-      RF_ENV: ${{ github.event.inputs.env }}
     outputs:
       LOGIN_URL: ${{ secrets.LOGIN_URL }}
       USEREMAIL: ${{ secrets.USEREMAIL }}
       USERPASSWORD: ${{ secrets.USERPASSWORD }}
-      RF_ENV: ${{ github.event.inputs.env }}
+      RF_ENV: ${{ steps.setenv.outputs.RF_ENV }}
     steps:
       - name: Setup environment
-        run: echo "Environment variables are ready"
+        id: setenv
+        run: |
+          ENV_INPUT="${{ github.event.inputs.env }}"
+          if [ -z "$ENV_INPUT" ]; then
+            ENV_INPUT="test"
+          fi
+          echo "RF_ENV=$ENV_INPUT" >> $GITHUB_OUTPUT
 
   run-tests:
     needs: setup-env
@@ -83,6 +84,12 @@ jobs:
           echo "Running command: $CMD"
           eval $CMD
 
+      - name: Upload Robot Framework reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-results
+          path: results/
+
   generate-report:
     needs: run-tests
     runs-on: ubuntu-latest
@@ -102,4 +109,3 @@ jobs:
         with:
           name: robot-final-results
           path: results/
-           
