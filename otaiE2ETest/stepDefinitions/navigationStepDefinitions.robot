@@ -2,8 +2,6 @@
 Resource    ../utils/fixture.robot
 
 *** Variables ***
-#${email}      hello@altence.com
-#${password}   some-test-pass
 
 *** Keywords ***
 I Open the Lightence App
