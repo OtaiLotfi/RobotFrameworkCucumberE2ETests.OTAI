@@ -20,32 +20,21 @@ on:
         required: false
         default: ''
       env:
-        description: 'Environment to run tests in (dev, test, staging)'
+        description: 'Environment to run tests in (dev, test, prod)'
         required: false
         default: 'test'
 
 jobs:
-
-  setup-env:
+  test:
     runs-on: ubuntu-latest
-    outputs:
-      RF_ENV: ${{ steps.setenv.outputs.RF_ENV }}
-    steps:
-      - name: Setup environment
-        id: setenv
-        run: |
-          ENV_INPUT="${{ github.event.inputs.env }}"
-          if [ -z "$ENV_INPUT" ]; then
-            ENV_INPUT="test"
-          fi
-          echo "RF_ENV=$ENV_INPUT" >> $GITHUB_OUTPUT
 
-  run-tests:
-    needs: setup-env
-    runs-on: ubuntu-latest
     env:
-      RF_ENV: ${{ needs.setup-env.outputs.RF_ENV }}
+      LOGIN_URL: ${{ secrets.LOGIN_URL }}
+      USEREMAIL: ${{ secrets.USEREMAIL }}
+      USERPASSWORD: ${{ secrets.USERPASSWORD }}
+      RF_ENV: ${{ github.event.inputs.env }}
       HEADLESS: "true"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -64,14 +53,12 @@ jobs:
       - name: Run Robot Framework tests
         run: |
           source venv/bin/activate
-          set -a
-          source otaiE2ETest/env_files/${{ env.RF_ENV }}.env
-          set +a
-
           TEST_PATH="${{ github.event.inputs.test_path }}"
           INCLUDE_TAGS="${{ github.event.inputs.test_tags }}"
           EXCLUDE_TAGS="${{ github.event.inputs.exclude_tags }}"
+
           CMD="robot --outputdir results"
+
           if [ ! -z "$INCLUDE_TAGS" ]; then
             CMD="$CMD --include \"$INCLUDE_TAGS\""
           fi
@@ -79,6 +66,7 @@ jobs:
             CMD="$CMD --exclude \"$EXCLUDE_TAGS\""
           fi
           CMD="$CMD \"$TEST_PATH\""
+
           echo "Running command: $CMD"
           eval $CMD
 
@@ -86,23 +74,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: robot-results
-          path: results/
-
-  generate-report:
-    needs: run-tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Robot Framework reports
-        uses: actions/download-artifact@v3
-        with:
-          name: robot-results
-          path: results/
-
-      - name: Generate Report
-        run: echo "Reports downloaded to ./results folder"
-
-      - name: Upload Final Robot Framework reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: robot-final-results
           path: results/
