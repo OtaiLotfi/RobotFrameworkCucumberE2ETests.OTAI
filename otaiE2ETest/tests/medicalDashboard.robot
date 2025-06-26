@@ -1,0 +1,32 @@
+*** Settings ***
+Resource    ../utils/fixture.robot
+
+Test Setup    Given I Open Lightence UI
+Test Teardown   Close Browser
+Test Tags       Test++   LotfiOTAI
+
+*** Test Cases ***
+Test++: Search For Doctors Within The Map
+    [Tags]    Test++:021  
+    Then I Open The Section  Medical Dashboard
+    Then I Open The ${2} Doctor's Card From The Map
+    And I Assert The Doctor's Details  Kayden Hunter  Dermatologist
+    Then I Open The ${3} Doctor's Card From The Map
+    And I Assert The Doctor's Details  Annabella Morton  Oncologist
+    Then I Open The ${1} Doctor's Card From The Map
+    And I Assert The Doctor's Details  Cameron Bell  Surgeon
+    Then I Open The ${4} Doctor's Card From The Map
+    And I Assert The Doctor's Details  James Moss  Therapist
+    Then I Open The ${6} Doctor's Card From The Map
+    And I Assert The Doctor's Details  Francisco Venancio  Neurologist
+    And I Click The Zoom Button  Zoom out
+    Then I Open The ${5} Doctor's Card From The Map
+    And I Assert The Doctor's Details  Sara Mills  Ophthalmologist
+    Then I Open The ${7} Doctor's Card From The Map
+    And I Assert The Doctor's Details  Jorden Cannon  common.undefined
+    And I Click The Zoom Button  Zoom in
+
+Test++: Search For Doctors' Data Using The Search Function
+    [Tags]    Test++:022  
+    Then I Search For  latest screenings
+    And I Assert The Displayed Text  Latest screenings

@@ -1,9 +1,10 @@
 *** Settings ***
 Resource    ../utils/fixture.robot
 
-*** Variables ***
-
 *** Keywords ***
-I Open The Application
-    Given I Open The App
-    Then I Login In The App  ${USEREMAIL}   ${USERPASSWORD}
+I Open Lightence UI
+    I Open The App
+    I Login In The App  ${USEREMAIL}   ${USERPASSWORD}
+
+I Assert Lightence UI Is Opened
+    I Assert The Displayed Text  Lightence
