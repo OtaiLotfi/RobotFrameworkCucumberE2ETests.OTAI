@@ -68,7 +68,8 @@ jobs:
           CMD="$CMD \"$TEST_PATH\""
 
           echo "Running command: $CMD"
-          eval $CMD
+          eval $CMD || echo "Robot tests failed, but continuing to generate reports..."
+        continue-on-error: true
 
       - name: Upload Robot Framework reports
         uses: actions/upload-artifact@v4

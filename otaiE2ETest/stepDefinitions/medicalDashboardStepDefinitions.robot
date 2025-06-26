@@ -18,4 +18,5 @@ I Assert The Doctor's Details
     [Arguments]      ${doctor}   ${specifity}
     I Assert The Displayed Text  ${doctor}
     I Assert The Displayed Text  ${specifity}
+    Sleep  2s
     Close the PopUp
