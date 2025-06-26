@@ -14,7 +14,7 @@ I Assert The Displayed Text
 I Open The Section 
     [Arguments]      ${text} 
     ${locator_text} =  Get Displayed Text  ${text}
-    Wait Until Element Is Visible    ${locator_text} 
+    Wait Until Element Is Visible    ${locator_text}    10s
     Click Element    ${locator_text}
 
 Click On White Space
