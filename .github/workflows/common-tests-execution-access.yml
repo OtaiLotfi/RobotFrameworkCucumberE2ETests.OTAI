@@ -66,45 +66,8 @@ jobs:
           source venv/bin/activate
           robot --outputdir results/003 --include "Test++:003" otaiE2ETest/tests/
 
-  generate-test-data-report:
-    needs: test-data
-    runs-on: ubuntu-latest
-    env:
-      HEADLESS: "true"
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install robotframework
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install robotframework
-
-      - name: Merge Pre-test Reports
-        run: |
-          source venv/bin/activate
-          rebot --output results/pretest-output.xml \
-                --report results/pretest-report.html \
-                --log results/pretest-log.html \
-                results/001/output.xml results/002/output.xml results/003/output.xml
-
-      - name: Upload Pre-test Combined Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: pretest-results
-          path: |
-            results/pretest-output.xml
-            results/pretest-log.html
-            results/pretest-report.html
-
   run-remain-tests:
-    needs: [setup-env, test-data]
+    needs: test-data
     runs-on: ubuntu-latest
     env:
       RF_ENV: ${{ needs.setup-env.outputs.RF_ENV }}
@@ -136,25 +99,66 @@ jobs:
             --exclude "Test++:003" \
             otaiE2ETest/tests/
 
-  generate-remain-report:
-    needs: run-remain-tests
+  generate-test-data-report:
+    needs: test-data
     runs-on: ubuntu-latest
-    env:
-      HEADLESS: "true"
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Set up Python & Install robotframework
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
-      - name: Install robotframework
-        run: |
+      - run: |
           python -m venv venv
           source venv/bin/activate
           pip install robotframework
+
+      - name: Download test-data reports
+        uses: actions/download-artifact@v4
+        with:
+          name: pretest-results
+          path: results/
+
+      - name: Merge Pre-test Reports
+        run: |
+          source venv/bin/activate
+          rebot --output results/pretest-output.xml \
+                --report results/pretest-report.html \
+                --log results/pretest-log.html \
+                results/001/output.xml results/002/output.xml results/003/output.xml
+
+      - name: Upload Pre-test Combined Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pretest-results
+          path: |
+            results/pretest-output.xml
+            results/pretest-log.html
+            results/pretest-report.html
+
+  generate-remain-report:
+    needs: run-remain-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python & Install robotframework
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install robotframework
+
+      - name: Download remain test reports
+        uses: actions/download-artifact@v4
+        with:
+          name: remain-results
+          path: results/remain/
 
       - name: Merge Remaining Test Reports
         run: |
@@ -164,7 +168,7 @@ jobs:
                 --log results/remain-log.html \
                 results/remain/output.xml
 
-      - name: Upload Remaining Test Combined Report
+      - name: Upload Remaining Combined Report
         uses: actions/upload-artifact@v4
         with:
           name: remain-results
@@ -177,25 +181,37 @@ jobs:
     needs: [generate-test-data-report, generate-remain-report]
     runs-on: ubuntu-latest
     steps:
-      - name: Download Pre-test Report
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python & Install robotframework
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install robotframework
+
+      - name: Download all combined reports
         uses: actions/download-artifact@v4
         with:
           name: pretest-results
-          path: results/
+          path: results/pretest/
 
-      - name: Download Remaining Test Report
+      - name: Download remain combined reports
         uses: actions/download-artifact@v4
         with:
           name: remain-results
-          path: results/
+          path: results/remain/
 
       - name: Combine Final Report
         run: |
-          pip install robotframework
+          source venv/bin/activate
           rebot --output results/all-output.xml \
                 --report results/all-report.html \
                 --log results/all-log.html \
-                results/pretest-output.xml results/remain-output.xml
+                results/pretest/pretest-output.xml results/remain/remain-output.xml
 
       - name: Upload Final Combined Report
         uses: actions/upload-artifact@v4
