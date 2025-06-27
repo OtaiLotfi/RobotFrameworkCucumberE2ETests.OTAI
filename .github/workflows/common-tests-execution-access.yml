@@ -110,7 +110,11 @@ jobs:
           set -a
           source otaiE2ETest/env_files/${{ env.RF_ENV }}.env
           set +a
-          robot --outputdir results/remain --exclude "Test++:001|Test++:002|Test++:003" otaiE2ETest/tests/
+          robot --outputdir results/remain \
+            --exclude "Test++:001" \
+            --exclude "Test++:002" \
+            --exclude "Test++:003" \
+            otaiE2ETest/tests/
 
       - name: Upload Remaining Test Reports
         uses: actions/upload-artifact@v4
