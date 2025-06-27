@@ -15,8 +15,8 @@ I Assert The Displayed Text
 I Open The Section 
     [Arguments]      ${text} 
     Wait Until Element Is Visible    ${toggle_icon}    10s
-    Wait Until Element Is Visible    ${text}    10s
     Click Element    ${toggle_icon}
+    Wait Until Element Is Visible    ${text}           10s
     ${locator_text} =  Get Displayed Text  ${text}
     Click Element    ${locator_text}
 
