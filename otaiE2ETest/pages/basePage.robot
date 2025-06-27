@@ -5,6 +5,7 @@ Resource    ../utils/fixture.robot
 ${email_locator}        //input[@id='email']
 ${password_locator}     //input[@id='password']
 ${Login_locator}        //span[text()='Log In']
+${toggle_icon}          //span[@aria-label='right']
 
 *** Keywords ***
 I Assert The Displayed Text
@@ -13,8 +14,8 @@ I Assert The Displayed Text
 
 I Open The Section 
     [Arguments]      ${text} 
+    Click Element    ${toggle_icon}
     ${locator_text} =  Get Displayed Text  ${text}
-    Wait Until Element Is Visible    ${locator_text}    10s
     Click Element    ${locator_text}
 
 Click On White Space
