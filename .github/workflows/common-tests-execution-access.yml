@@ -66,6 +66,26 @@ jobs:
           source venv/bin/activate
           robot --outputdir results/003 --include "Test++:003" otaiE2ETest/tests/
 
+  generate-test-data-report:
+    needs: test-data
+    runs-on: ubuntu-latest
+    env:
+      HEADLESS: "true"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install robotframework
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install robotframework
+
       - name: Merge Pre-test Reports
         run: |
           source venv/bin/activate
@@ -116,14 +136,45 @@ jobs:
             --exclude "Test++:003" \
             otaiE2ETest/tests/
 
-      - name: Upload Remaining Test Reports
+  generate-remain-report:
+    needs: run-remain-tests
+    runs-on: ubuntu-latest
+    env:
+      HEADLESS: "true"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install robotframework
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install robotframework
+
+      - name: Merge Remaining Test Reports
+        run: |
+          source venv/bin/activate
+          rebot --output results/remain-output.xml \
+                --report results/remain-report.html \
+                --log results/remain-log.html \
+                results/remain/output.xml
+
+      - name: Upload Remaining Test Combined Report
         uses: actions/upload-artifact@v4
         with:
           name: remain-results
-          path: results/remain/
+          path: |
+            results/remain-output.xml
+            results/remain-report.html
+            results/remain-log.html
 
   generate-report:
-    needs: [test-data, run-remain-tests]
+    needs: [generate-test-data-report, generate-remain-report]
     runs-on: ubuntu-latest
     steps:
       - name: Download Pre-test Report
@@ -136,7 +187,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: remain-results
-          path: results/remain/
+          path: results/
 
       - name: Combine Final Report
         run: |
@@ -144,7 +195,7 @@ jobs:
           rebot --output results/all-output.xml \
                 --report results/all-report.html \
                 --log results/all-log.html \
-                results/pretest-output.xml results/remain/output.xml
+                results/pretest-output.xml results/remain-output.xml
 
       - name: Upload Final Combined Report
         uses: actions/upload-artifact@v4
