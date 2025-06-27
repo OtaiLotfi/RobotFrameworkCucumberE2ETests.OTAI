@@ -46,7 +46,7 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install -r requirements.txt
+          pip install -r requirements.txt robotframework
 
       - name: Run Test++:001
         run: |
@@ -66,14 +66,22 @@ jobs:
           source venv/bin/activate
           robot --outputdir results/003 --include "Test++:003" otaiE2ETest/tests/
 
-      - name: Upload Test Data Reports
+      - name: Merge Pre-test Reports
+        run: |
+          source venv/bin/activate
+          rebot --output results/pretest-output.xml \
+                --report results/pretest-report.html \
+                --log results/pretest-log.html \
+                results/001/output.xml results/002/output.xml results/003/output.xml
+
+      - name: Upload Pre-test Combined Report
         uses: actions/upload-artifact@v4
         with:
           name: pretest-results
           path: |
-            results/001/
-            results/002/
-            results/003/
+            results/pretest-output.xml
+            results/pretest-log.html
+            results/pretest-report.html
 
   run-remain-tests:
     needs: [setup-env, test-data]
@@ -94,7 +102,7 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install -r requirements.txt
+          pip install -r requirements.txt robotframework
 
       - name: Run Remaining Tests
         run: |
@@ -114,19 +122,31 @@ jobs:
     needs: [test-data, run-remain-tests]
     runs-on: ubuntu-latest
     steps:
-      - name: Download All Reports
+      - name: Download Pre-test Report
         uses: actions/download-artifact@v4
         with:
-          path: all-results/
+          name: pretest-results
+          path: results/
 
-      - name: Combine and Generate Final Report
+      - name: Download Remaining Test Report
+        uses: actions/download-artifact@v4
+        with:
+          name: remain-results
+          path: results/remain/
+
+      - name: Combine Final Report
         run: |
-          mkdir -p final-results
-          cp -r all-results/* final-results/
-          echo "All test results combined in final-results directory."
+          pip install robotframework
+          rebot --output results/all-output.xml \
+                --report results/all-report.html \
+                --log results/all-log.html \
+                results/pretest-output.xml results/remain/output.xml
 
       - name: Upload Final Combined Report
         uses: actions/upload-artifact@v4
         with:
           name: all-combined-reports
-          path: final-results/
+          path: |
+            results/all-output.xml
+            results/all-report.html
+            results/all-log.html
