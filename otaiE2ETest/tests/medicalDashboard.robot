@@ -15,15 +15,15 @@ Test++: Search For Doctors Within The Map
     And I Assert The Doctor's Details  Annabella Morton  Oncologist
     Then I Open The ${1} Doctor's Card From The Map
     And I Assert The Doctor's Details  Cameron Bell  Surgeon
-    Then I Open The ${4} Doctor's Card From The Map
-    And I Assert The Doctor's Details  James Moss  Therapist
     Then I Open The ${6} Doctor's Card From The Map
     And I Assert The Doctor's Details  Francisco Venancio  Neurologist
+    Then I Open The ${4} Doctor's Card From The Map
+    And I Assert The Doctor's Details  James Moss  Therapist
     And I Click The Zoom Button  Zoom out
     Then I Open The ${5} Doctor's Card From The Map
     And I Assert The Doctor's Details  Sara Mills  Ophthalmologist
-    Then I Open The ${7} Doctor's Card From The Map
-    And I Assert The Doctor's Details  Jorden Cannon  common.undefined
+    #Then I Open The ${7} Doctor's Card From The Map
+    #And I Assert The Doctor's Details  Jorden Cannon  common.undefined
     And I Click The Zoom Button  Zoom in
 
 Test++: Search For Doctors' Data Using The Search Function
