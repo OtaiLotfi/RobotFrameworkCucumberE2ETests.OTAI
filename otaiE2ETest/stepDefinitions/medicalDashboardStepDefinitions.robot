@@ -19,4 +19,4 @@ I Assert The Doctor's Details
     I Assert The Displayed Text  ${doctor}
     I Assert The Displayed Text  ${specifity}
     Sleep  2s
-    Close the PopUp
+    #Close the PopUp
