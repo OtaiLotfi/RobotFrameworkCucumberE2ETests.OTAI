@@ -91,9 +91,3 @@ jobs:
 
       - name: Generate Report
         run: echo "Reports downloaded to ./results folder"
-
-      - name: Upload Final Robot Framework reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: robot-final-results
-          path: results/
