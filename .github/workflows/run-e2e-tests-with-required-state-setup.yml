@@ -123,7 +123,7 @@ jobs:
           path: results/remain/
 
   generate-report:
-    needs: [pre-test-setup, run-remain-tests]
+    needs: [pre-test-setup, run-remaining-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Download Pre-test Report
