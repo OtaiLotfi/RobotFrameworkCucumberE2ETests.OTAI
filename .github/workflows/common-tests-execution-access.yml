@@ -1,4 +1,4 @@
-name: Common Execution Access
+name: E2E Tests with Required State Setup
 
 on:
   workflow_dispatch:
@@ -26,7 +26,8 @@ jobs:
             ENV_INPUT="test"
           fi
           echo "RF_ENV=$ENV_INPUT" >> $GITHUB_OUTPUT
-  test-data:
+
+  pre-test-setup:
     needs: setup-env
     runs-on: ubuntu-latest
     env:
@@ -46,6 +47,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt robotframework
+
       - name: Run Test++:001
         run: |
           source venv/bin/activate
@@ -53,14 +55,17 @@ jobs:
           source otaiE2ETest/env_files/${{ env.RF_ENV }}.env
           set +a
           robot --outputdir results/001 --include "Test++:001" otaiE2ETest/tests/
+
       - name: Run Test++:002
         run: |
           source venv/bin/activate
           robot --outputdir results/002 --include "Test++:002" otaiE2ETest/tests/
+
       - name: Run Test++:003
         run: |
           source venv/bin/activate
           robot --outputdir results/003 --include "Test++:003" otaiE2ETest/tests/
+
       - name: Merge Pre-test Reports
         run: |
           source venv/bin/activate
@@ -68,6 +73,7 @@ jobs:
                 --report results/pretest-report.html \
                 --log results/pretest-log.html \
                 results/001/output.xml results/002/output.xml results/003/output.xml
+
       - name: Upload Pre-test Combined Report
         uses: actions/upload-artifact@v4
         with:
@@ -76,8 +82,9 @@ jobs:
             results/pretest-output.xml
             results/pretest-log.html
             results/pretest-report.html
+
   run-remain-tests:
-    needs: [setup-env, test-data]
+    needs: [setup-env, pre-test-setup]
     runs-on: ubuntu-latest
     env:
       RF_ENV: ${{ needs.setup-env.outputs.RF_ENV }}
@@ -96,6 +103,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt robotframework
+
       - name: Run Remaining Tests
         run: |
           source venv/bin/activate
@@ -107,6 +115,7 @@ jobs:
             --exclude "Test++:002" \
             --exclude "Test++:003" \
             otaiE2ETest/tests/
+
       - name: Upload Remaining Test Reports
         uses: actions/upload-artifact@v4
         with:
@@ -114,7 +123,7 @@ jobs:
           path: results/remain/
 
   generate-report:
-    needs: [test-data, run-remain-tests]
+    needs: [pre-test-setup, run-remain-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Download Pre-test Report
@@ -136,6 +145,7 @@ jobs:
                 --report results/all-report.html \
                 --log results/all-log.html \
                 results/pretest-output.xml results/remain/output.xml
+
       - name: Upload Final Combined Report
         uses: actions/upload-artifact@v4
         with:
