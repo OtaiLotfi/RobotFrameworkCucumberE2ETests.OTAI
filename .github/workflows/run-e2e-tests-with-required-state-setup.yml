@@ -11,6 +11,14 @@ on:
         description: 'Environment to run tests in (dev, test, staging)'
         required: false
         default: 'test'
+      remaining_include_tags:
+        description: 'Tags to include in remaining tests (optional)'
+        required: false
+        default: ''
+      remaining_exclude_tags:
+        description: 'Tags to exclude from remaining tests (optional)'
+        required: false
+        default: ''
 
 jobs:
   setup-env:
@@ -104,17 +112,25 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt robotframework
 
-      - name: Run Remaining Tests
+      - name: Run Remaining Tests with Dynamic Tags
         run: |
           source venv/bin/activate
           set -a
           source otaiE2ETest/env_files/${{ env.RF_ENV }}.env
           set +a
-          robot --outputdir results/remain \
-            --exclude "Test++:001" \
-            --exclude "Test++:002" \
-            --exclude "Test++:003" \
-            otaiE2ETest/tests/
+          INCLUDE_TAGS="${{ github.event.inputs.remaining_include_tags }}"
+          EXCLUDE_TAGS="${{ github.event.inputs.remaining_exclude_tags }}"
+          CMD="robot --outputdir results/remain"
+          if [ ! -z "$INCLUDE_TAGS" ]; then
+            CMD="$CMD --include \"$INCLUDE_TAGS\""
+          fi
+          CMD="$CMD --exclude \"Test++:001\" --exclude \"Test++:002\" --exclude \"Test++:003\""
+          if [ ! -z "$EXCLUDE_TAGS" ]; then
+            CMD="$CMD --exclude \"$EXCLUDE_TAGS\""
+          fi
+          CMD="$CMD otaiE2ETest/tests/"
+          echo "Running: $CMD"
+          eval $CMD
 
       - name: Upload Remaining Test Reports
         uses: actions/upload-artifact@v4
