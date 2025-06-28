@@ -1,4 +1,4 @@
-name: E2E Tests with Required State Setup
+name: Run E2E Tests with Required State Setup
 
 on:
   workflow_dispatch:
@@ -83,7 +83,7 @@ jobs:
             results/pretest-log.html
             results/pretest-report.html
 
-  run-remain-tests:
+  run-remaining-tests:
     needs: [setup-env, pre-test-setup]
     runs-on: ubuntu-latest
     env:

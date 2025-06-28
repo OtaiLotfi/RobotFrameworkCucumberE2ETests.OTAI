@@ -1,0 +1,99 @@
+name: Run E2E Tests without Required State Setup
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_path:
+        description: 'Path to tests'
+        required: false
+        default: 'otaiE2ETest/tests/'
+      test_tags:
+        description: 'Tags to include (optional)'
+        required: false
+        default: 'LotfiOTAI AND Test++'
+      exclude_tags:
+        description: 'Tags to exclude (optional)'
+        required: false
+        default: ''
+      env:
+        description: 'Environment to run tests in (dev, test, staging)'
+        required: false
+        default: 'test'
+
+jobs:
+  setup-env:
+    runs-on: ubuntu-latest
+    outputs:
+      RF_ENV: ${{ steps.setenv.outputs.RF_ENV }}
+    steps:
+      - name: Set environment name
+        id: setenv
+        run: |
+          ENV_INPUT="${{ github.event.inputs.env }}"
+          if [ -z "$ENV_INPUT" ]; then
+            ENV_INPUT="test"
+          fi
+          echo "RF_ENV=$ENV_INPUT" >> $GITHUB_OUTPUT
+  run-tests:
+    needs: setup-env
+    runs-on: ubuntu-latest
+    env:
+      RF_ENV: ${{ needs.setup-env.outputs.RF_ENV }}
+      HEADLESS: "true"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+      - name: Run Robot Framework tests
+        run: |
+          source venv/bin/activate
+          set -a
+          source otaiE2ETest/env_files/${{ env.RF_ENV }}.env
+          set +a
+          TEST_PATH="${{ github.event.inputs.test_path }}"
+          INCLUDE_TAGS="${{ github.event.inputs.test_tags }}"
+          EXCLUDE_TAGS="${{ github.event.inputs.exclude_tags }}"
+          CMD="robot --outputdir results"
+          if [ ! -z "$INCLUDE_TAGS" ]; then
+            CMD="$CMD --include \"$INCLUDE_TAGS\""
+          fi
+          if [ ! -z "$EXCLUDE_TAGS" ]; then
+            CMD="$CMD --exclude \"$EXCLUDE_TAGS\""
+          fi
+          CMD="$CMD \"$TEST_PATH\""
+          echo "Running command: $CMD"
+          eval $CMD
+      - name: Upload Robot Framework reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-results
+          path: results/
+
+  generate-report:
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Robot Framework reports
+        uses: actions/download-artifact@v4
+        with:
+          name: robot-results
+          path: results/
+
+      - name: Generate Report
+        run: echo "Reports downloaded to ./results folder"
+
+      - name: Upload Final Robot Framework reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-final-results
+          path: results/
