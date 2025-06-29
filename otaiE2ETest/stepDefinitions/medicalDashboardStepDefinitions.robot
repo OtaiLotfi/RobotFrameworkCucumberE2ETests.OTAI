@@ -19,4 +19,7 @@ I Assert The Doctor's Details
     I Assert The Displayed Text  ${doctor}
     I Assert The Displayed Text  ${specifity}
     Sleep  2s
-    #Close the PopUp
+
+I Click On The Doctor's Profile 
+   [Arguments]      ${text}
+   Click On The Doctor's Profile   ${text}

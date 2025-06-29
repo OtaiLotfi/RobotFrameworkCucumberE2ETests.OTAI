@@ -11,4 +11,6 @@ def get_item_from_search_list(text):
 
 def get_image_from_map(text):
     return f"//*/div[4]/img[{text}]"
-  
+
+def get_friend_name(text):
+    return f"//span[text()='{text}']"

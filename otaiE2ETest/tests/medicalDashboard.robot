@@ -30,3 +30,10 @@ Test++: Search For Doctors' Data Using The Search Function
     [Tags]    Test++:022  
     Then I Search For  latest screenings
     And I Assert The Displayed Text  Latest screenings
+    Then I Click On The Doctor's Profile  Cameron Bell
+    And I Click On The Doctor's Profile   Kayden Hunter
+    And I Click On The Doctor's Profile   Annabella Morton
+    And I Click On The Doctor's Profile   Steve Wolfe
+    And I Click On The Doctor's Profile   James Moss
+    And I Click On The Doctor's Profile   Sara Mills
+    Sleep  10s

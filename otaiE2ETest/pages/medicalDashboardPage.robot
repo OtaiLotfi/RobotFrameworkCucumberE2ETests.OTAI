@@ -32,3 +32,9 @@ Close the PopUp
     Wait Until Element Is Visible    ${popup_locator}   10s
     ${element}=    Get WebElement    ${popup_locator}
     Click Element    ${element}
+
+Click On The Doctor's Profile 
+    [Arguments]      ${text} 
+    Wait Until Element Is Visible    ${search_locator}   5s
+    ${searched_item} =  Get Friend Name  ${text}
+    Click Element    ${searched_item}
