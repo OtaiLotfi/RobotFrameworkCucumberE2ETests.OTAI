@@ -2,9 +2,9 @@
 Resource    ../utils/fixture.robot
 
 *** Variables ***
-${searched_item_locator}        Latest screenings
-${search_locator}               //input[@placeholder='Search']
-${popup_locator}                //a[@aria-label='Close popup']   
+${search_locator}                        //input[@placeholder='Search']
+${popup_locator}                         //[@aria-label='Close popup']   
+${displayed_doctors_from_calendar}       //div[@class='ant-picker-calendar-date-content']/div 
 
 *** Keywords ***
 Click The Zoom Button
@@ -15,7 +15,7 @@ Click The Zoom Button
     Sleep  5s 
 
 Search For 
-    [Arguments]      ${value} 
+    [Arguments]      ${value}   ${searched_item_locator}
     Wait Until Element Is Visible    ${search_locator}   5s
     Input Text       ${search_locator}       ${value}
     ${searched_item} =  Get Item From Search List  ${searched_item_locator}
@@ -38,3 +38,20 @@ Click On The Doctor's Profile
     Wait Until Element Is Visible    ${search_locator}   5s
     ${searched_item} =  Get Friend Name  ${text}
     Click Element    ${searched_item}
+
+Move From ${previous_input} To ${prefered_input}  
+    I Assert The Displayed Text  ${previous_input} 
+    ${previous_input_locator} =  Get Latest Screenings Input  ${previous_input}
+    Click Element    ${previous_input_locator}
+    Sleep  1s
+    ${prefered_input_locator} =  Get Displayed Text  ${prefered_input}
+    Click Element    ${prefered_input_locator}
+
+Click On All Displayed Doctors From Calendar
+  ${count}=    Get Element Count    ${displayed_doctors_from_calendar}
+  FOR    ${index}    IN RANGE    6
+    Wait Until Element Is Visible  (${displayed_doctors_from_calendar})[${index + 1}]    10s
+    Scroll Element Into View       (${displayed_doctors_from_calendar})[${index + 1}]
+    ${el}=    Get WebElement    (${displayed_doctors_from_calendar})[${index + 1}]
+    Click Element     ${el}
+  END     

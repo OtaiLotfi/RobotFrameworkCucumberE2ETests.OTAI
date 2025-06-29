@@ -14,3 +14,6 @@ def get_image_from_map(text):
 
 def get_friend_name(text):
     return f"//span[text()='{text}']"
+
+def get_latest_screenings_input(text):
+    return f"//span[@title='{text}']"
