@@ -56,4 +56,3 @@ Test++: Search For Doctors' Data Using The Search Function
     Then I Search For  treatment plan  Treatment plan
     And I Assert The Displayed Text  Treatment plan
     And I Click On All Displayed Doctors From Calendar    
-    Sleep  5s
