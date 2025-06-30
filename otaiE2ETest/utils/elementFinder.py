@@ -17,3 +17,9 @@ def get_friend_name(text):
 
 def get_latest_screenings_input(text):
     return f"//span[@title='{text}']"
+
+def get_checkbox(text):
+    return f"//*/span[text()='{text}']/../..//span[contains(@class,'checkbox-inner')]"
+
+def get_input_by_id(text):
+    return f"//input[@id='{text}']"
