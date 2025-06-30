@@ -24,3 +24,12 @@ I Open The Section
 Click On White Space
     [Arguments]    ${x}=0    ${y}=0
     Execute JavaScript    document.elementFromPoint(${x}, ${y}).click();    
+
+I Scroll To Bottom Of Page
+    Sleep    0.5s
+    Execute JavaScript    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    Sleep    1s
+
+I Scroll To Element ${element}
+    Wait Until Element Is Visible    ${element}
+    Scroll Element Into View    ${element}       
