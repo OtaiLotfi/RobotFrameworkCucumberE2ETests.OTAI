@@ -23,3 +23,10 @@ def get_checkbox(text):
 
 def get_input_by_id(text):
     return f"//input[@id='{text}']"
+
+def get_drop_down_input(text):
+    return f"//*[text()='{text}']/../..//span[@class='ant-select-selection-search']"
+
+def get_location_input(text):
+    return f"//label[text()='{text}']/../..//input"
+
