@@ -15,3 +15,5 @@ Resource    ../pages/dataTablesPage.robot
 Resource    ../stepDefinitions/dataTablesStepDefinitions.robot
 Resource    ../pages/formsPage.robot
 Resource    ../stepDefinitions/formsStepDefinitions.robot
+Resource    ../pages/test_data_page.robot
+Resource    ../stepDefinitions/test_data_stepDefinitions.robot

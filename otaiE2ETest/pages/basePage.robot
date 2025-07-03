@@ -49,5 +49,6 @@ Enter The Input Value
 Fill The Input Field
     [Arguments]   ${text_locator}   ${value} 
     ${input_field} =  Get Input By Id  ${text_locator}
+    Wait Until Element Is Visible    ${input_field}     10s
     Input Text       ${input_field}    ${value}
       

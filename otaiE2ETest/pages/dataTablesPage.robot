@@ -17,7 +17,7 @@ Click The Checkbox for ${name}
 
 Click On The Text From The Button ${text}
     ${locator_text} =  Get Displayed Text  ${text}
-    Wait Until Element Is Visible    ${locator_text}   5s
+    Wait Until Element Is Visible    ${locator_text}   10s
     Click Element    ${locator_text}
     
 Fill the field ${text} with ${value}
