@@ -29,4 +29,3 @@ def get_drop_down_input(text):
 
 def get_location_input(text):
     return f"//label[text()='{text}']/../..//input"
-

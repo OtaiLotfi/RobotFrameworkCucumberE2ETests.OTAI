@@ -50,3 +50,7 @@ Fill The Input Field
     [Arguments]   ${text_locator}   ${value} 
     ${input_field} =  Get Input By Id  ${text_locator}
     Input Text       ${input_field}    ${value}
+=======
+I Scroll To Element ${element}
+    Wait Until Element Is Visible    ${element}
+    Scroll Element Into View    ${element}       
