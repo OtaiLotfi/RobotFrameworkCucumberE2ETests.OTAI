@@ -36,7 +36,7 @@ Test++: Search For Doctors' Data Using The Search Function
     And I Click On The Doctor's Profile   Steve Wolfe
     And I Click On The Doctor's Profile   James Moss
     And I Click On The Doctor's Profile   Sara Mills
-    When I Move From June To January  
+    When I Move From July To January  
     Then I See The Percentage Of Doctor's Data
     When I Move From January To May
     Then I See The Percentage Of Doctor's Data
@@ -51,7 +51,7 @@ Test++: Search For Doctors' Data Using The Search Function
     And I Move From March To February
     Then I See The Percentage Of Doctor's Data
 
-Test++: Search For Doctors' Data Using The Search Function
+Test++: Displayed Doctors Details From Calendar
     [Tags]    Test++:023  
     Then I Search For  treatment plan  Treatment plan
     And I Assert The Displayed Text  Treatment plan

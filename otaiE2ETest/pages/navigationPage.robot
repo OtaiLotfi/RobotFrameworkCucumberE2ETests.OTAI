@@ -2,8 +2,6 @@
 Resource    ../utils/fixture.robot
 
 *** Variables ***
-${email_locator}        //input[@id='email']
-${password_locator}     //input[@id='password']
 ${Login_locator}        //span[text()='Log In']
 
 *** Keywords ***
@@ -13,11 +11,9 @@ I Open The App
 
 I Login In The App
     [Arguments]      ${email}               ${password}
-    Clear Field Character By Character      ${email_locator}
-    Input Text       ${email_locator}       ${email}
-    Clear Field Character By Character      ${password_locator} 
-    Input Text       ${password_locator}    ${password}
-    Click Element    ${Login_locator}
+      Set The Input Value  "#email"      ${email} 
+      Set The Input Value  "#password"   ${password}
+      Click Element    ${Login_locator}
 
 Clear Field Character By Character
     [Arguments]    ${locator}

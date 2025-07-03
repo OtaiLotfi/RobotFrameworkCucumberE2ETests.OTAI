@@ -3,7 +3,6 @@ Resource    ../utils/fixture.robot
 
 *** Variables ***
 ${filter_icon_locator}         //*/span[@role='button']
-${made_by}                     //*[text()='Made by']
 
 *** Keywords ***
 Click On The Filter Icon 

@@ -33,7 +33,7 @@ Test++: Edit The Table Contents
     Then I Search For  editable table  Editable table
     And I Assert The Displayed Text  Editable Table
     And I Scroll To Bottom Of Page
-    And I Scroll To Element ${made_by}
+    And I Scroll To Element Made by
     Then I Click On The Text From The Button Edit
     And I Fill the field name with Lotfi
     And I Fill the field age with 28

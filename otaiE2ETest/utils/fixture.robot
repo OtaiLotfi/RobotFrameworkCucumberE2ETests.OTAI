@@ -13,3 +13,5 @@ Resource    ../pages/medicalDashboardPage.robot
 Resource    ../stepDefinitions/medicalDashboardStepDefinitions.robot
 Resource    ../pages/dataTablesPage.robot
 Resource    ../stepDefinitions/dataTablesStepDefinitions.robot
+Resource    ../pages/formsPage.robot
+Resource    ../stepDefinitions/formsStepDefinitions.robot
