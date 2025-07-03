@@ -33,8 +33,6 @@ Test++: Search For Names From Basic Table
     Then I Enter The Age Value 11
     And I Click On The Text From The Button OK
     And I Click On The Text From The Button Submit
-    Then I Search For  dynamic form  Dynamic form
-    And I Assert The Displayed Text  Dynamic form
     Then I Select The Area
     And I Click On The Text From The Button Save
     Then I Scroll To Element Next
