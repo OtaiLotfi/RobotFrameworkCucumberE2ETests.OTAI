@@ -5,7 +5,7 @@ Library     String
 Library    Collections
 
 *** Variables ***
-${Gender_locator}              //*[text()='Select']/../..//span[@class='ant-select-selection-item']
+${Gender_locator}              //*[text()='Gender']/../..//span[@class='ant-select-selection-item']
 ${color_locator}               //div[@class='ant-select-selection-overflow']
 ${switch_button_locator}       //button[@role='switch']
 ${radio_group_locator}         //span[text()=' 2']/..//input 
