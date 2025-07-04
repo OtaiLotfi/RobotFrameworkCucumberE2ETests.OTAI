@@ -15,7 +15,7 @@ ${input_file_locator}          //input[@type="file"]
 ${area_locator}                //*[text()='Area']/../..//span[@class='ant-select-selection-search']
 ${area_text_locator}           (//*[text()='Beijing'])[2]
 ${file_path}                   otaiE2ETest/files/Test++.jpg
-${gender_locator}              //*[text()='Male']/../..//span[@class='ant-select-selection-search']
+#${gender_locator}              //*[text()='Male']/../..//span[@class='ant-select-selection-search']
 
 *** Keywords ***
 Upload The File
