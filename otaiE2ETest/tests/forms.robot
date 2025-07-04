@@ -56,4 +56,3 @@ Test++: Search For Names From Basic Table
     Then I Enter The Input Text Country With country
     And I Click On The Text From The Button Next
     And I Click On The Text From The Button Done
-    Then I Scroll To Element Validation form
