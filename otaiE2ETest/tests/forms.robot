@@ -40,7 +40,7 @@ Test++: Search For Names From Basic Table
     Then I Enter The Input Text Password With 1234
     Then I Enter The Input Text Confirm Password With 1234
     And I Click On The Text From The Button Next
-    #Then I Scroll To Element Gender
+    Then I Scroll To Element Step form
     Then I Select The Gender Male
     Then I Enter The Input Text First Name With Lotfi
     Then I Enter The Input Text Last Name With OTAI
